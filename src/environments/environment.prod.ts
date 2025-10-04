@@ -10,7 +10,7 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44329/',
+    issuer: 'https://company-api-production.up.railway.app/',
     redirectUri: baseUrl,
     clientId: 'Company_App',
     responseType: 'code',
@@ -19,7 +19,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:44329',
+      url: 'https://company-api-production.up.railway.app',
       rootNamespace: 'Charge.Company',
     },
   },
