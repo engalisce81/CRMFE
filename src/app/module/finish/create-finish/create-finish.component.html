@@ -1,0 +1,46 @@
+<div class="create-container">
+  <div class="header">
+    <h2>Create New Finish</h2>
+    <button type="button" routerLink="/finishes" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="finishForm" (ngSubmit)="submit()" class="finish-form">
+
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h3>Finish Information</h3>
+
+      <div class="form-group full-width">
+        <label for="name">Finish Name *</label>
+        <input id="name" type="text" formControlName="name" class="form-control"
+          placeholder="Enter finish name (e.g., Marble, Wood, Paint)"
+          [class.is-invalid]="finishForm.get('name')?.invalid && finishForm.get('name')?.touched" />
+        @if(finishForm.get('name')?.invalid && finishForm.get('name')?.touched){
+          <div class="error-message">Finish name is required</div>
+        }
+      </div> 
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/finishes" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="finishForm.invalid || loading">
+        @if(loading){ 
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Creating Finish...' : 'Create Finish' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Creating finish... Please wait</p>
+      </div>
+    </div>
+  }
+</div>

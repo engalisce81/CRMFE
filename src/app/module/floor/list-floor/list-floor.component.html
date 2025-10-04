@@ -1,0 +1,110 @@
+<div class="list-container" style="width: 100%;">
+
+  <!-- Delete confirmation -->
+  @if (showDeleteConfirm) {
+  <div class="delete-confirm-overlay">
+    <div class="delete-confirm-card">
+      <p>Are you sure you want to delete <strong>{{ floorToDelete.name }}</strong>?</p>
+      <div class="delete-confirm-actions">
+        <button class="btn btn-secondary" (click)="cancelDelete()">No</button>
+        <button class="btn btn-danger" (click)="deleteFloor()">Yes</button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Search and Create -->
+  <div class="toolbar">
+    <input type="text" [(ngModel)]="search" placeholder="Search floors..." class="search-input"
+      (keyup.enter)="onSearchChange()" />
+    <button class="btn btn-search" (click)="onSearchChange()" title="Search">
+      <i class="fas fa-search"></i>
+    </button>
+
+    <button routerLink="/floors/create" class="btn btn-success" title="Create">
+      <i class="fas fa-plus-circle me-1"></i> Create Floor
+    </button>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading floors...</p>
+  </div>
+  }
+
+  <!-- Table -->
+  @if (!loading) {
+  @if (floors.length > 0) {
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Floor Name</th>
+        <th>Key</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (floor of floors; track floor.id; let i = $index) {
+      <tr>
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+        <td><i class="fas fa-building me-1"></i> {{ floor.name }}</td>
+        <td>{{ floor.key }}</td>
+        <td class="actions">
+          <button [routerLink]="['/floors/view', floor.id]" class="btn btn-view" title="View">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button [routerLink]="['/floors/update', floor.id]" class="btn btn-edit" title="Edit">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button (click)="confirmDelete(floor)" class="btn btn-delete" title="Delete">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  @if (totalCount > pageSize) {
+  <div class="pagination">
+    <div class="pagination-info">
+      Showing {{ (pageIndex - 1) * pageSize + 1 }} - {{ Math.min(pageIndex * pageSize, totalCount) }} of {{ totalCount }} floors
+    </div>
+    <div class="pagination-controls">
+      <button class="btn btn-previous" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        @for (page of getPageNumbers(); track page) {
+        <button class="page-number {{ page === pageIndex ? 'active' : '' }}" (click)="onPageChange(page)">
+          {{ page }}
+        </button>
+        }
+      </div>
+
+      <button class="btn btn-next" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">
+        Next
+      </button>
+    </div>
+  </div>
+  }
+  }
+  @else {
+  <div class="no-data-message">
+    <div class="no-data-icon">
+      <i class="fas fa-building"></i>
+    </div>
+    <h3>No Floors Found</h3>
+    <p>No floors match your search criteria. Try adjusting your search or create a new floor.</p>
+    <button routerLink="/floors/create" class="btn btn-success">
+      <i class="fas fa-plus-circle me-1"></i> Create Your First Floor
+    </button>
+  </div>
+  }
+  }
+</div>

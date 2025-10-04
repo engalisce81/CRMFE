@@ -1,0 +1,225 @@
+.crm-content {
+  padding: 20px;
+
+  .projects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .projects-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+
+      .filter-item {
+        flex: 1 1 auto;
+      }
+
+      .search-input, .filter-select {
+        width: 100%;
+        padding: 6px 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+    }
+
+    .projects-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .project-card {
+        display: flex;
+        width: 100%;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        position: relative;
+        transition: transform 0.2s;
+        
+        &:hover {
+          transform: translateY(-2px);
+        }
+
+        .project-image {
+          flex: 0 0 400px;
+          height: 400px;
+          overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .project-data {
+          flex: 1;
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .project-header {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            .project-title {
+              margin: 10px 0;
+              margin: 0;
+              font-size: 18px;
+              font-weight: bold;
+              color: #333;
+            }
+
+            .project-price {
+              margin: 10px 0;
+              margin: 4px 0 0 0;
+              color: #e74c3c;
+              font-weight: bold;
+              font-size: 16px;
+            }
+
+            .project-actions-dropdown {
+              position: relative;
+              cursor: pointer;
+              .action-icon { font-size: 20px; color: #555; }
+              .actions-list {
+                position: absolute;
+                top: 25px;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                z-index: 10;
+
+                button {
+                  border: none;
+                  background: none;
+                  cursor: pointer;
+                  padding: 5px 10px;
+                  font-size: 14px;
+                  color: #555;
+
+                  &:hover { color: #6c5ce7; }
+                }
+              }
+            }
+          }
+
+          .project-info-row,
+          .details-row,
+          .project-description,
+          .project-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap:nowrap;
+
+            .info-item,
+            .detail-item,
+            .description-item,
+            .meta-item {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              background-color: #f5f5f5;
+              padding: 5px 10px;
+              border-radius: 5px;
+              font-size: 13px;
+              color: #333;
+            }
+
+            .status-available { background-color: #14a551; color: white; }
+            .status-unavailable { background-color: #e74c3c; color: white; }
+          }
+
+          .details-row {
+            .detail-item {
+              flex: 1 1 100px;
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+
+              i {
+                margin-bottom: 2px;
+                font-size: 14px;
+              }
+
+              span {
+                font-size: 13px;
+              }
+            }
+          }
+
+          .project-description,
+          .project-meta {
+            .description-item,
+            .meta-item {
+              flex: 1 1 120px;
+            }
+          }
+        }
+      }
+    }
+
+    .loading-container, .no-data-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+      color: #555;
+
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #eee;
+        border-top-color: #6c5ce7;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+      .no-data-icon { font-size: 50px; color: #6c5ce7; }
+    }
+
+    .delete-confirm-overlay {
+      position: fixed;
+      top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .delete-confirm-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+        text-align: center;
+
+        .delete-icon { font-size: 40px; color: #e74c3c; margin-bottom: 10px; }
+        .delete-warning { color: #e74c3c; margin: 10px 0; }
+        .delete-confirm-actions { display: flex; gap: 10px; justify-content: center; }
+      }
+    }
+  }
+}

@@ -1,0 +1,137 @@
+<div class="crm-content">
+  <div class="projects-container">
+
+    <!-- الفلاتر -->
+    <div class="projects-filters">
+      <div class="filter-item">
+        <input type="text" [(ngModel)]="search" placeholder="ابحث بالاسم، الكود، أو المالك..." 
+               class="search-input" (keyup.enter)="onSearchChange()" />
+      </div>
+      <div class="filter-item">
+        <select class="filter-select" [(ngModel)]="selectedUnitType" (change)="onSearchChange()">
+          <option value="">نوع الوحدة</option>
+          <option *ngFor="let type of unitTypes" [value]="type.id">{{type.name}}</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <select class="filter-select" [(ngModel)]="selectedProject" (change)="onSearchChange()">
+          <option value="">المشروع</option>
+          <option *ngFor="let project of projects" [value]="project.id">{{project.name}}</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" (click)="onSearchChange()">
+        <i class="fas fa-search"></i> بحث
+      </button>
+      <button class="btn btn-success" routerLink="/units/create">
+        <i class="fas fa-plus"></i> إضافة وحدة جديدة
+      </button>
+    </div>
+
+    <!-- حالة التحميل -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">جاري تحميل الوحدات...</p>
+    </div>
+
+    <!-- الكروت -->
+    <div *ngIf="!loading && units.length > 0" class="projects-cards">
+      <div class="project-card" *ngFor="let unit of units">
+
+        <!-- صورة الوحدة -->
+        <div class="project-image">
+          <img [src]="unit.logoUrl || 'https://via.placeholder.com/150'" [alt]="unit.name" />
+        </div>
+
+        <!-- بيانات الوحدة -->
+        <div class="project-data">
+
+          <!-- العنوان والسعر -->
+          <div class="project-header">
+           <div > <h3 class="project-title">{{unit.name || 'بدون اسم'}}</h3>
+           <h3 class="project-price">{{unit.price | currency:'EGP':'symbol':'1.0-0'}}</h3></div>
+
+            <!-- زر الإجراءات القابل للطي -->
+            <div class="project-actions-dropdown" (click)="unit.showActions = !unit.showActions">
+              <i class="fas fa-ellipsis-h action-icon"></i>
+              <div class="actions-list" *ngIf="unit.showActions">
+                <button [routerLink]="['/units/view', unit.id]" title="عرض"><i class="fas fa-eye"></i></button>
+                <button [routerLink]="['/units/update', unit.id]" title="تعديل"><i class="fas fa-edit"></i></button>
+                <button (click)="confirmDelete(unit)" title="حذف"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- المعلومات الأساسية صف واحد -->
+          <div class="project-info-row">
+            <p class="info-item"><i class="fas fa-home"></i> {{unit.unitTypeName || 'نوع الوحدة'}}</p>
+            <p class="info-item"><i class="fas fa-building"></i> {{unit.projectName || 'المشروع'}}</p>
+            <p class="info-item"><i class="fas fa-layer-group"></i> {{unit.floorName || 'الطابق'}}</p>
+            <p class="info-item" [ngClass]="unit.stateless ? 'status-unavailable' : 'status-available'">
+              <i class="fas" [ngClass]="unit.stateless ? 'fa-times-circle' : 'fa-check-circle'"></i>
+              {{unit.stateless ? 'غير متاح' : 'متاح'}}
+            </p>
+          </div>
+
+          <!-- التفاصيل الفنية صف واحد -->
+          <div class="details-row">
+            <p class="detail-item"><i class="fas fa-ruler-combined"></i> {{unit.area}} م²</p>
+            <p class="detail-item"><i class="fas fa-bed"></i> {{unit.bedroomCount}}</p>
+            <p class="detail-item"><i class="fas fa-bath"></i> {{unit.bathroomCount}}</p>
+            <p class="detail-item"><i class="fas fa-paint-brush"></i> {{unit.finishName || 'التشطيب'}}</p>
+          </div>
+
+          <!-- الوصف صف واحد -->
+          <div class="project-description" *ngIf="unit.bedroomDescription || unit.bathroomDescription">
+            <p class="description-item" *ngIf="unit.bedroomDescription">
+              <i class="fas fa-bed"></i> {{unit.bedroomDescription}}
+            </p>
+            <p class="description-item" *ngIf="unit.bathroomDescription">
+              <i class="fas fa-bath"></i> {{unit.bathroomDescription}}
+            </p>
+          </div>
+
+          <!-- معلومات المالك صف واحد -->
+          <div class="project-meta property-info">
+            <p class="meta-item"><i class="fas fa-user"></i> {{unit.ownerName || 'غير محدد'}}</p>
+            <p class="meta-item"><i class="fas fa-phone"></i> {{unit.ownerPhoneNumber || 'غير محدد'}}</p>
+            <p class="meta-item"><i class="fas fa-map-marker-alt"></i> {{unit.location || 'غير محدد'}}</p>
+          </div>
+
+          <!-- معلومات إضافية صف واحد -->
+          <div class="project-meta sales-info">
+            <p class="meta-item"><i class="fas fa-code"></i> {{unit.code || 'غير محدد'}}</p>
+            <p class="meta-item"><i class="fas fa-building"></i> {{unit.isCompany ? 'شركة' : 'فردي'}}</p>
+            <p class="meta-item" *ngIf="unit.notes"><i class="fas fa-sticky-note"></i> {{unit.notes}}</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- لا توجد بيانات -->
+    <div *ngIf="!loading && units.length === 0" class="no-data-message">
+      <div class="no-data-icon"><i class="fas fa-home"></i></div>
+      <h3>لا توجد وحدات</h3>
+      <p>لم يتم العثور على وحدات تطابق معايير البحث. حاول تعديل البحث أو قم بإضافة وحدة جديدة.</p>
+      <button class="btn btn-success" routerLink="/units/create">
+        <i class="fas fa-plus"></i> إضافة وحدة جديدة
+      </button>
+    </div>
+
+    <!-- تأكيد الحذف -->
+    <div *ngIf="showDeleteConfirm" class="delete-confirm-overlay">
+      <div class="delete-confirm-card">
+        <div class="delete-icon"><i class="fas fa-trash"></i></div>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من رغبتك في حذف الوحدة <strong>{{ unitToDelete.name }}</strong>؟</p>
+        <p class="delete-warning">لا يمكن التراجع عن هذا الإجراء.</p>
+        <div class="delete-confirm-actions">
+          <button class="btn btn-secondary" (click)="cancelDelete()">إلغاء</button>
+          <button class="btn btn-danger" (click)="deleteUnit()">حذف الوحدة</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

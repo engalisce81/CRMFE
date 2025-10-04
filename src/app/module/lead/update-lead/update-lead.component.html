@@ -1,0 +1,80 @@
+<div class="create-container">
+  <div class="header">
+    <h2>Update Lead</h2>
+    <button type="button" routerLink="/leads" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="leadForm" (ngSubmit)="submit()" class="lead-form">
+
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h3>Lead Information</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Lead Name *</label>
+          <input id="name" type="text" formControlName="name" class="form-control"
+            placeholder="Enter lead name (e.g., John Smith, Sarah Johnson)"
+            [class.is-invalid]="leadForm.get('name')?.invalid && leadForm.get('name')?.touched" />
+          @if(leadForm.get('name')?.invalid && leadForm.get('name')?.touched){
+            <div class="error-message">Lead name is required</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input id="phoneNumber" type="tel" formControlName="phoneNumber" class="form-control"
+            placeholder="Enter phone number (e.g., +1234567890)"/>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" class="form-control" rows="4"
+          placeholder="Describe the lead requirements, interests, budget, and any additional notes..."></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="source">Source *</label>
+        <select id="source" formControlName="source" class="form-control"
+          [class.is-invalid]="leadForm.get('source')?.invalid && leadForm.get('source')?.touched">
+          <option value="">-- Select Source --</option>
+          <option value="Website">Website</option>
+          <option value="Referral">Referral</option>
+          <option value="Social Media">Social Media</option>
+          <option value="Walk-in">Walk-in</option>
+          <option value="Phone Call">Phone Call</option>
+          <option value="Email">Email</option>
+          <option value="Advertisement">Advertisement</option>
+          <option value="Event">Event</option>
+          <option value="Other">Other</option>
+        </select>
+        @if(leadForm.get('source')?.invalid && leadForm.get('source')?.touched){
+          <div class="error-message">Source is required</div>
+        }
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/leads" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="leadForm.invalid || loading">
+        @if(loading){ 
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Updating Lead...' : 'Update Lead' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Updating lead... Please wait</p>
+      </div>
+    </div>
+  }
+</div>

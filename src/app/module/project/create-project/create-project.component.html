@@ -1,0 +1,62 @@
+<div class="create-container">
+  <div class="header">
+    <h2>Create New Project</h2>
+    <button type="button" routerLink="/projects" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="projectForm" (ngSubmit)="submit()" class="project-form">
+
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h3>Project Information</h3>
+
+      <div class="form-group full-width">
+        <label for="name">Project Name *</label>
+        <input id="name" type="text" formControlName="name" class="form-control"
+          placeholder="Enter project name (e.g., Sunrise Residences, Downtown Towers)"
+          [class.is-invalid]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched" />
+        @if(projectForm.get('name')?.invalid && projectForm.get('name')?.touched){
+          <div class="error-message">Project name is required</div>
+        }
+      </div> 
+
+      <div class="form-group full-width">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" class="form-control" rows="4"
+          placeholder="Describe the project features, amenities, target market, and unique selling points..."></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="location">Location *</label>
+        <input id="location" type="text" formControlName="location" class="form-control"
+          placeholder="Enter project location (e.g., New Cairo, 6th October City, Sheikh Zayed)"
+          [class.is-invalid]="projectForm.get('location')?.invalid && projectForm.get('location')?.touched" />
+        @if(projectForm.get('location')?.invalid && projectForm.get('location')?.touched){
+          <div class="error-message">Location is required</div>
+        }
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/projects" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="projectForm.invalid || loading">
+        @if(loading){ 
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Creating Project...' : 'Create Project' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Creating project... Please wait</p>
+      </div>
+    </div>
+  }
+</div>

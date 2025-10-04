@@ -1,0 +1,58 @@
+<div class="update-container">
+  <div class="header">
+    <h2>Update Deal Status</h2>
+    <button type="button" routerLink="/dealstatuses" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="dealStatusForm" (ngSubmit)="submit()" class="deal-status-form">
+
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h3>Deal Status Information</h3>
+
+      <!-- Name -->
+      <div class="form-group full-width">
+        <label for="name">Status Name *</label>
+        <input id="name" type="text" formControlName="name" class="form-control"
+          placeholder="Enter deal status name (e.g., New, Won, Lost)"
+          [class.is-invalid]="dealStatusForm.get('name')?.invalid && dealStatusForm.get('name')?.touched" />
+        @if(dealStatusForm.get('name')?.invalid && dealStatusForm.get('name')?.touched){
+          <div class="error-message">Status name is required</div>
+        }
+      </div>
+
+      <!-- Points -->
+      <div class="form-group full-width">
+        <label for="points">Points *</label>
+        <input id="points" type="number" formControlName="points" class="form-control"
+          placeholder="Enter points value"
+          [class.is-invalid]="dealStatusForm.get('points')?.invalid && dealStatusForm.get('points')?.touched" />
+        @if(dealStatusForm.get('points')?.invalid && dealStatusForm.get('points')?.touched){
+          <div class="error-message">Points are required and must be a positive number</div>
+        }
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/dealstatuses" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="dealStatusForm.invalid || loading">
+        @if(loading){ 
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Updating Deal Status...' : 'Update Deal Status' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Updating deal status... Please wait</p>
+      </div>
+    </div>
+  }
+</div>

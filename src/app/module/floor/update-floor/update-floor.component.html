@@ -1,0 +1,58 @@
+<div class="update-container">
+  <div class="header">
+    <h2>Update Floor</h2>
+    <button type="button" routerLink="/floors" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="floorForm" (ngSubmit)="submit()" class="floor-form">
+
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h3>Floor Information</h3>
+
+      <!-- Floor Name -->
+      <div class="form-group full-width">
+        <label for="name">Floor Name *</label>
+        <input id="name" type="text" formControlName="name" class="form-control"
+          placeholder="Enter floor name (e.g., First Floor, Basement)"
+          [class.is-invalid]="floorForm.get('name')?.invalid && floorForm.get('name')?.touched" />
+        @if(floorForm.get('name')?.invalid && floorForm.get('name')?.touched){
+          <div class="error-message">Floor name is required</div>
+        }
+      </div>
+
+      <!-- Floor Key -->
+      <div class="form-group full-width">
+        <label for="key">Floor Key *</label>
+        <input id="key" type="number" formControlName="key" class="form-control"
+          placeholder="Enter unique floor key (e.g., 1, 2, 3)"
+          [class.is-invalid]="floorForm.get('key')?.invalid && floorForm.get('key')?.touched" />
+        @if(floorForm.get('key')?.invalid && floorForm.get('key')?.touched){
+          <div class="error-message">Floor key is required</div>
+        }
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/floors" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="floorForm.invalid || loading">
+        @if(loading){ 
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Updating Floor...' : 'Update Floor' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Updating floor... Please wait</p>
+      </div>
+    </div>
+  }
+</div>

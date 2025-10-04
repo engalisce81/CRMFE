@@ -1,0 +1,258 @@
+<div class="create-container">
+  <div class="header">
+    <h2>Update Unit</h2>
+    <button type="button" routerLink="/units" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="unitForm" (ngSubmit)="submit()" class="unit-form">
+
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h3>Basic Information</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Unit Name *</label>
+          <input id="name" type="text" formControlName="name" class="form-control"
+            placeholder="Enter unit name (e.g., Apartment 101, Villa A)"
+            [class.is-invalid]="unitForm.get('name')?.invalid && unitForm.get('name')?.touched" />
+          @if(unitForm.get('name')?.invalid && unitForm.get('name')?.touched){
+            <div class="error-message">Unit name is required</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="code">Code</label>
+          <input id="code" type="text" formControlName="code" class="form-control"
+            placeholder="Enter unit code (e.g., UNT-001, VIL-A)"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="area">Area (m²) *</label>
+          <input id="area" type="number" formControlName="area" class="form-control"
+            placeholder="Enter area in square meters"
+            [class.is-invalid]="unitForm.get('area')?.invalid && unitForm.get('area')?.touched" />
+          @if(unitForm.get('area')?.invalid && unitForm.get('area')?.touched){
+            <div class="error-message">Area is required and must be greater than 0</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price *</label>
+          <input id="price" type="number" formControlName="price" class="form-control"
+            placeholder="Enter price in local currency"
+            [class.is-invalid]="unitForm.get('price')?.invalid && unitForm.get('price')?.touched" />
+          @if(unitForm.get('price')?.invalid && unitForm.get('price')?.touched){
+            <div class="error-message">Price is required and must be greater than 0</div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" class="form-control" rows="3"
+          placeholder="Describe the unit features, amenities, and special characteristics..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input id="location" type="text" formControlName="location" class="form-control"
+            placeholder="Enter unit location within the project"/>
+        </div>
+        
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <input id="notes" type="text" formControlName="notes" class="form-control"
+            placeholder="Any additional notes or remarks"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bedrooms & Bathrooms -->
+    <div class="form-section">
+      <h3>Unit Details</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bedrooms *</label>
+          <input type="number" formControlName="bedroomCount" class="form-control"
+            placeholder="Number of bedrooms"
+            [class.is-invalid]="unitForm.get('bedroomCount')?.invalid && unitForm.get('bedroomCount')?.touched" />
+          @if(unitForm.get('bedroomCount')?.invalid && unitForm.get('bedroomCount')?.touched){
+            <div class="error-message">Bedroom count is required</div>
+          }
+        </div>
+        <div class="form-group">
+          <label>Bathrooms *</label>
+          <input type="number" formControlName="bathroomCount" class="form-control"
+            placeholder="Number of bathrooms"
+            [class.is-invalid]="unitForm.get('bathroomCount')?.invalid && unitForm.get('bathroomCount')?.touched" />
+          @if(unitForm.get('bathroomCount')?.invalid && unitForm.get('bathroomCount')?.touched){
+            <div class="error-message">Bathroom count is required</div>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bedroom Description</label>
+          <textarea formControlName="bedroomDescription" class="form-control" rows="2"
+            placeholder="Describe bedroom features, sizes, or special details..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Bathroom Description</label>
+          <textarea formControlName="bathroomDescription" class="form-control" rows="2"
+            placeholder="Describe bathroom features, fixtures, or amenities..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Owner Information -->
+    <div class="form-section">
+      <h3>Owner Information</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Owner Name</label>
+          <input type="text" formControlName="ownerName" class="form-control"
+            placeholder="Enter owner's full name"/>
+        </div>
+        <div class="form-group">
+          <label>Owner Phone Number</label>
+          <input type="tel" formControlName="ownerPhoneNumber" class="form-control"
+            placeholder="Enter owner's phone number"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dropdowns -->
+    <div class="form-section">
+      <h3>Relations</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Project *</label>
+          <select formControlName="projectId" class="form-control"
+            [class.is-invalid]="unitForm.get('projectId')?.invalid && unitForm.get('projectId')?.touched">
+            <option value="">-- Select Project --</option>
+            @for(project of projects; track project.id){
+              <option [value]="project.id">{{project.name}}</option>
+            }
+          </select>
+          @if(unitForm.get('projectId')?.invalid && unitForm.get('projectId')?.touched){
+            <div class="error-message">Project is required</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Floor *</label>
+          <select formControlName="floorId" class="form-control"
+            [class.is-invalid]="unitForm.get('floorId')?.invalid && unitForm.get('floorId')?.touched">
+            <option value="">-- Select Floor --</option>
+            @for(floor of floors; track floor.id){
+              <option [value]="floor.id">{{floor.name}}</option>
+            }
+          </select>
+          @if(unitForm.get('floorId')?.invalid && unitForm.get('floorId')?.touched){
+            <div class="error-message">Floor is required</div>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Unit Type *</label>
+          <select formControlName="unitTypeId" class="form-control"
+            [class.is-invalid]="unitForm.get('unitTypeId')?.invalid && unitForm.get('unitTypeId')?.touched">
+            <option value="">-- Select Unit Type --</option>
+            @for(unitType of unitTypes; track unitType.id){
+              <option [value]="unitType.id">{{unitType.name}}</option>
+            }
+          </select>
+          @if(unitForm.get('unitTypeId')?.invalid && unitForm.get('unitTypeId')?.touched){
+            <div class="error-message">Unit type is required</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Finish *</label>
+          <select formControlName="finishId" class="form-control"
+            [class.is-invalid]="unitForm.get('finishId')?.invalid && unitForm.get('finishId')?.touched">
+            <option value="">-- Select Finish --</option>
+            @for(finish of finishes; track finish.id){
+              <option [value]="finish.id">{{finish.name}}</option>
+            }
+          </select>
+          @if(unitForm.get('finishId')?.invalid && unitForm.get('finishId')?.touched){
+            <div class="error-message">Finish is required</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Status & Logo -->
+    <div class="form-section">
+      <h3>Status & Media</h3>
+      <div class="form-row">
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="stateless" class="checkbox-input"/>
+            Stateless (Unit has no state management)
+          </label>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="isCompany" class="checkbox-input"/>
+            Is Company (Corporate-owned unit)
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Logo / Unit Image</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control-file"
+            title="Upload unit logo or image (JPG, PNG, max 5MB)"/>
+          
+          @if(uploadingImage){ 
+            <div class="spinner">Uploading image... Please wait</div>
+          }
+
+          @if(logoPreview){ 
+            <div class="image-preview">
+              <img [src]="logoPreview" alt="Logo Preview" class="preview-image"/>
+              <button type="button" (click)="removeLogo()" class="btn btn-remove">Remove Image</button>
+            </div>
+          }
+          
+          <div class="file-hint">
+            <small>Supported formats: JPG, PNG, GIF | Max size: 5MB</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/units" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="unitForm.invalid || loading">
+        @if(loading){ 
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Updating Unit...' : 'Update Unit' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Updating unit... Please wait</p>
+      </div>
+    </div>
+  }
+</div>

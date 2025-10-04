@@ -1,0 +1,92 @@
+<div class="update-container">
+  <div class="header">
+    <h2>Update Deal</h2>
+    <button type="button" routerLink="/deals" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <form [formGroup]="dealForm" (ngSubmit)="submit()" class="deal-form">
+
+    <!-- Deal Information -->
+    <div class="form-section">
+      <h3>Deal Information</h3>
+
+      <!-- Lead -->
+      <div class="form-group full-width">
+        <label for="leadId">Lead *</label>
+        <select id="leadId" formControlName="leadId" class="form-control"
+          [class.is-invalid]="dealForm.get('leadId')?.invalid && dealForm.get('leadId')?.touched">
+          <option value="" disabled>Select Lead</option>
+          @for (lead of leads; track lead.id) {
+            <option [value]="lead.id">{{ lead.name }}</option>
+          }
+        </select>
+        @if(dealForm.get('leadId')?.invalid && dealForm.get('leadId')?.touched){
+          <div class="error-message">Lead is required</div>
+        }
+      </div>
+
+      <!-- Unit -->
+      <div class="form-group full-width">
+        <label for="unitId">Unit *</label>
+        <select id="unitId" formControlName="unitId" class="form-control"
+          [class.is-invalid]="dealForm.get('unitId')?.invalid && dealForm.get('unitId')?.touched">
+          <option value="" disabled>Select Unit</option>
+          @for (unit of units; track unit.id) {
+            <option [value]="unit.id">{{ unit.name }}</option>
+          }
+        </select>
+        @if(dealForm.get('unitId')?.invalid && dealForm.get('unitId')?.touched){
+          <div class="error-message">Unit is required</div>
+        }
+      </div>
+
+      <!-- Deal Status -->
+      <div class="form-group full-width">
+        <label for="dealStatusId">Deal Status *</label>
+        <select id="dealStatusId" formControlName="dealStatusId" class="form-control"
+          [class.is-invalid]="dealForm.get('dealStatusId')?.invalid && dealForm.get('dealStatusId')?.touched">
+          <option value="" disabled>Select Status</option>
+          @for (status of dealStatuses; track status.id) {
+            <option [value]="status.id">{{ status.name }}</option>
+          }
+        </select>
+        @if(dealForm.get('dealStatusId')?.invalid && dealForm.get('dealStatusId')?.touched){
+          <div class="error-message">Deal status is required</div>
+        }
+      </div>
+
+      <!-- Amount -->
+      <div class="form-group full-width">
+        <label for="amount">Amount *</label>
+        <input id="amount" type="number" formControlName="amount" class="form-control"
+          placeholder="Enter deal amount"
+          [class.is-invalid]="dealForm.get('amount')?.invalid && dealForm.get('amount')?.touched" />
+        @if(dealForm.get('amount')?.invalid && dealForm.get('amount')?.touched){
+          <div class="error-message">Amount is required and must be > 0</div>
+        }
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" routerLink="/deals" class="btn btn-secondary" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="dealForm.invalid || loading">
+        @if(loading){
+          <span class="spinner"></span>
+        }
+        {{ loading ? 'Updating Deal...' : 'Update Deal' }}
+      </button>
+    </div>
+  </form>
+
+  @if(loading){
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Updating deal... Please wait</p>
+      </div>
+    </div>
+  }
+</div>
